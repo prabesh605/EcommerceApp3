@@ -1,4 +1,5 @@
 import 'package:ecommerce_app3/screens/forgot_password.dart';
+import 'package:ecommerce_app3/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -217,6 +218,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                     onTap: () {
                       /// Signup Screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignupScreen()),
+                      );
                     },
 
                     child: const Text(
