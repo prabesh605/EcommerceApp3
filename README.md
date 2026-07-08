@@ -16,3 +16,4 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 Flutter version:  3.35.6
+Design: https://www.figma.com/design/8gdhUaxYz56ML7jOdO7HAA/eCommerce-App-UI-Kit---Case-Study-Ecommerce-Mobile-App-UI-kit--Community-?node-id=1-17021&t=MRhCZp6hMVRAYbLO-0

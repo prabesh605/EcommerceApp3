@@ -22,94 +22,191 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //search
-            TextFormField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                suffixIcon: Icon(Icons.mic),
-                hint: Text('Search any Product'),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            //all feature sort/ filter
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "All Featured",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //search
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: Icon(Icons.mic),
+                  hint: Text('Search any Product'),
+                  border: OutlineInputBorder(),
                 ),
-                Row(
+              ),
+              SizedBox(height: 20),
+              //all feature sort/ filter
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "All Featured",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        child: Row(
+                          children: [
+                            Text("Sort"),
+                            SizedBox(width: 10),
+                            Icon(Icons.sort),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        child: Row(
+                          children: [
+                            Text("Filter"),
+                            SizedBox(width: 10),
+                            Icon(Icons.filter_b_and_w_sharp),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              //category
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
+                height: 120,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    Product product = products[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(product.imageUrl),
+                            radius: 35,
+                          ),
+                          Text(product.category),
+                        ],
+                      ),
+                    );
+                    // return CircleAvatar(
+                    //   radius: 80,
+                    //   backgroundImage: NetworkImage(product.imageUrl),
+                    // );
+                  },
+                ),
+              ),
+              //50% off offer
+              Image.asset('assets/banner.png', width: double.infinity),
+              //deal of the day -view all
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.blue,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Deal of the Day",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Icon(Icons.alarm, color: Colors.white),
+                            Text(
+                              '22h 55m 20s remaining',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     Container(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(4),
                       ),
-
                       child: Row(
                         children: [
-                          Text("Sort"),
-                          SizedBox(width: 10),
-                          Icon(Icons.sort),
+                          Text(
+                            'View all',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Icon(Icons.arrow_forward, color: Colors.white),
                         ],
                       ),
                     ),
-                    SizedBox(width: 20),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    // Column(children: [
 
-                      child: Row(
-                        children: [
-                          Text("Filter"),
-                          SizedBox(width: 10),
-                          Icon(Icons.filter_b_and_w_sharp),
-                        ],
-                      ),
-                    ),
+                    // ]),
                   ],
                 ),
-              ],
-            ),
-            SizedBox(height: 20),
-            //category
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
               ),
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  Product product = products[index];
-                  return CircleAvatar(
-                    radius: 80,
-                    backgroundImage: NetworkImage(product.imageUrl),
-                  );
-                },
+              //products horizontal scrolling
+              SizedBox(height: 20),
+              SizedBox(
+                height: 800,
+                child: ListView.builder(
+                  itemCount: products.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return Container(
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.20,
+                            width: MediaQuery.of(context).size.height * 0.30,
+                            child: Image.network(
+                              product.imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Text(product.name),
+                          Text('abca acacac aada adfsdjfkdkj\n kjkfdjkfj kjkj'),
+                          Text("\$200"),
+                          
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-            //50% off offer
-            //deal of the day -view all
-            //products horizontal scrolling
-            //special offer
-            //ads
-            //trending products
-            //product horizontall scolling
-            //ads view all
-            //ads sponsor
-          ],
+              //special offer
+              //ads
+              //trending products
+              //product horizontall scolling
+              //ads view all
+              //ads sponsor
+            ],
+          ),
         ),
       ),
     );
