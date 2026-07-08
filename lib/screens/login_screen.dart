@@ -2,7 +2,6 @@ import 'package:ecommerce_app3/screens/forgot_password.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -11,7 +10,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -28,7 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
           child: Column(
             children: [
-
               const SizedBox(height: 50),
 
               Align(
@@ -77,9 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscureText
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      obscureText ? Icons.visibility_off : Icons.visibility,
                     ),
 
                     onPressed: () {
@@ -105,16 +100,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.centerRight,
 
                 child: GestureDetector(
-                  onTap: () {               /// Forgot Password Screen
-                 
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordScreen(),
-                    ),
-                  );
+                  onTap: () {
+                    /// Forgot Password Screen
 
-                  
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordScreen(),
+                      ),
+                    );
                   },
 
                   child: const Text(
@@ -134,19 +128,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 55,
 
                 child: ElevatedButton(
-
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:const Color.fromARGB(237, 192, 16, 72),
+                    backgroundColor: const Color.fromARGB(237, 192, 16, 72),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
 
-                  onPressed: () {           
-                    
+                  onPressed: () {
                     /// Login Function
-
-                    
                   },
 
                   child: Text(
@@ -163,15 +153,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Row(
                 children: [
-
                   Expanded(child: Divider()),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      "Continue with",
-                      style: GoogleFonts.poppins(),
-                    ),
+                    child: Text("Continue with", style: GoogleFonts.poppins()),
                   ),
 
                   Expanded(child: Divider()),
@@ -181,29 +167,26 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 25),
 
               InkWell(
-                onTap: () {              /// Google Login
+                /// Google Login
+                onTap: () async {
+                  // String? error =
+                  //     await s.instance.googleLogin();
 
-                  onTap: () async {
-                    String? error =
-                        await FirebaseService.instance.googleLogin();
-
-                    if (error == null) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const HomeScreen(),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(error)),
-                      );
-                    }
-
+                  // if (error == null) {
+                  //   Navigator.pushReplacement(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (_) => const HomeScreen(),
+                  //     ),
+                  //   );
+                  // } else {
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text(error)),
+                  //   );
+                  // }
                 },
 
                 child: Container(
-
                   width: 60,
                   height: 60,
 
@@ -229,17 +212,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 children: [
-
-                  const Text(
-                    "Create new account? ",
-                  ),
+                  const Text("Create new account? "),
 
                   GestureDetector(
-
-                    onTap: () {           
-                      
-                      /// Signup Screen                    
-
+                    onTap: () {
+                      /// Signup Screen
                     },
 
                     child: const Text(
