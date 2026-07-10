@@ -1,15 +1,16 @@
 import 'package:ecommerce_app3/constants/strings.dart';
+import 'package:ecommerce_app3/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<ProductsScreen> createState() => _ProductsScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _ProductsScreenState extends State<ProductsScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,47 +96,62 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   final product = products[index];
-                  return Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(offset: Offset(0, 1), blurRadius: 0.1),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(12),
-                          child: SizedBox(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: Image.network(
-                              product.imageUrl,
-                              fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductScreen(product: product),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(offset: Offset(0, 1), blurRadius: 0.1),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadiusGeometry.circular(12),
+                            child: SizedBox(
+                              height: 150,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Image.network(
+                                product.imageUrl,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          product.name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text('abca acacac aada adfsdjfkdkj\n kjkfdjkfj kjkj'),
-                        Text(
-                          "\$200",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        // Text("4.5")
-                        RatingBar.builder(
-                          itemSize: 20,
-                          initialRating: 4.0,
-                          itemBuilder: (context, _) =>
-                              Icon(Icons.star, color: Colors.amber),
-                          onRatingUpdate: (value) {},
-                        ),
-                      ],
+                          Text(
+                            product.title,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            product.description,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                          ),
+                          Text(
+                            "\$${product.price}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          // Text("4.5")
+                          RatingBar.builder(
+                            itemSize: 20,
+                            ignoreGestures: true,
+                            initialRating: product.rating,
+                            itemBuilder: (context, _) =>
+                                Icon(Icons.star, color: Colors.amber),
+                            onRatingUpdate: (value) {},
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

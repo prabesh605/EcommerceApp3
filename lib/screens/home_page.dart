@@ -1,4 +1,5 @@
 import 'package:ecommerce_app3/constants/strings.dart';
+import 'package:ecommerce_app3/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -94,18 +95,18 @@ class _HomePageState extends State<HomePage> {
                 height: 120,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: products.length,
+                  itemCount: categories.length,
                   itemBuilder: (context, index) {
-                    Product product = products[index];
+                    Category category = categories[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(product.imageUrl),
+                            backgroundImage: NetworkImage(category.imageUrl),
                             radius: 35,
                           ),
-                          Text(product.category),
+                          Text(category.name),
                         ],
                       ),
                     );
@@ -134,39 +135,51 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final product = products[index];
-                    return Container(
-                      padding: EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.20,
-                            width: MediaQuery.of(context).size.height * 0.30,
-                            child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(12),
-                              child: Image.network(
-                                product.imageUrl,
-                                fit: BoxFit.cover,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductScreen(product: product),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        width: MediaQuery.of(context).size.height * 0.30,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.20,
+                              width: MediaQuery.of(context).size.height * 0.30,
+                              child: ClipRRect(
+                                borderRadius: BorderRadiusGeometry.circular(12),
+                                child: Image.network(
+                                  product.imageUrl,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Text(
-                            product.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text('abca acacac aada adfsdjfkdkj\n kjkfdjkfj kjkj'),
-                          Text(
-                            "\$200",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          // Text("4.5")
-                          RatingBar.builder(
-                            initialRating: 4.0,
-                            itemBuilder: (context, _) =>
-                                Icon(Icons.star, color: Colors.amber),
-                            onRatingUpdate: (value) {},
-                          ),
-                        ],
+                            Text(
+                              product.title,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(product.description),
+                            Text(
+                              "\$${product.price}",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            // Text("4.5")
+                            RatingBar.builder(
+                              initialRating: product.rating,
+                              itemBuilder: (context, _) =>
+                                  Icon(Icons.star, color: Colors.amber),
+                              onRatingUpdate: (value) {},
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -187,32 +200,44 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final product = products[index];
-                    return Container(
-                      padding: EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.10,
-                            width: MediaQuery.of(context).size.height * 0.15,
-                            child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(12),
-                              child: Image.network(
-                                product.imageUrl,
-                                fit: BoxFit.cover,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductScreen(product: product),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.10,
+                              width: MediaQuery.of(context).size.height * 0.15,
+                              child: ClipRRect(
+                                borderRadius: BorderRadiusGeometry.circular(12),
+                                child: Image.network(
+                                  product.imageUrl,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Text(
-                            product.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                            Text(
+                              product.title,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
 
-                          Text(
-                            "\$200",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                            Text(
+                              "\$200",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

@@ -1,5 +1,6 @@
+import 'package:ecommerce_app3/screens/cart_screen.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
-import 'package:ecommerce_app3/screens/products_screen.dart';
+import 'package:ecommerce_app3/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -15,8 +16,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // Center(child: Text('Home')),
     HomePage(),
     Center(child: Text('WishList')),
-    Center(child: Text('Cart')),
-    ProductsScreen(),
+    CartScreen(),
+    SearchScreen(),
     Center(child: Text('Settings')),
   ];
   @override
