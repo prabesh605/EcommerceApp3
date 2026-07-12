@@ -1,18 +1,18 @@
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:flutter/material.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+class WishlistScreen extends StatefulWidget {
+  const WishlistScreen({super.key});
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<WishlistScreen> createState() => _WishlistScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("My Cart")),
+      appBar: AppBar(title: Text("Wish list")),
       body: Column(
         children: [
           Expanded(
@@ -86,31 +86,6 @@ class _CartScreenState extends State<CartScreen> {
                       //image
                       //text column
                     ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(6),
-            padding: EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Total :Rs 10000",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {},
-                  child: Text(
-                    "Order Now",
-                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],

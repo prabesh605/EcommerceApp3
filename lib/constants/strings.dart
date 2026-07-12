@@ -251,11 +251,11 @@ final List<Category> categories = [
     imageUrl:
         "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500",
   ),
-  Category(
-    name: "Fashion",
-    imageUrl:
-        "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500",
-  ),
+  // Category(
+  //   name: "Fashion",
+  //   imageUrl:
+  //       "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500",
+  // ),
   Category(
     name: "Kids",
     imageUrl:
@@ -290,11 +290,11 @@ final List<Category> categories = [
     name: "Groceries",
     imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500",
   ),
-  Category(
-    name: "Health",
-    imageUrl:
-        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500",
-  ),
+  // Category(
+  //   name: "Health",
+  //   imageUrl:
+  //       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500",
+  // ),
   Category(
     name: "Jewelry",
     imageUrl:

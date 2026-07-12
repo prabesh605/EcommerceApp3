@@ -1,4 +1,5 @@
 import 'package:ecommerce_app3/screens/Navigation_screen.dart';
+import 'package:ecommerce_app3/screens/admin_dasboard.dart';
 import 'package:ecommerce_app3/screens/forgot_password.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
 import 'package:ecommerce_app3/screens/signup_screen.dart';
@@ -140,11 +141,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   onPressed: () {
                     /// Login Function
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => NavigationScreen(),
+                    //   ),
+                    // );
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => NavigationScreen(),
-                      ),
+                      MaterialPageRoute(builder: (context) => AdminDasboard()),
                     );
                   },
 
