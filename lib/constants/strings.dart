@@ -1,3 +1,5 @@
+import 'package:ecommerce_app3/models/category_model.dart';
+
 class Product {
   final String title;
   final String subTitle;
@@ -238,128 +240,143 @@ final List<Product> products = [
   ),
 ];
 
-class Category {
-  final String name;
-  final String imageUrl;
-
-  Category({required this.name, required this.imageUrl});
-}
-
-final List<Category> categories = [
-  Category(
-    name: "Beauty",
-    imageUrl:
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500",
-  ),
-  // Category(
-  //   name: "Fashion",
-  //   imageUrl:
-  //       "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500",
-  // ),
-  Category(
-    name: "Kids",
-    imageUrl:
-        "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500",
-  ),
-  Category(
-    name: "Electronics",
-    imageUrl:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500",
-  ),
-  Category(
-    name: "Home & Living",
-    imageUrl:
-        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500",
-  ),
-  Category(
-    name: "Furniture",
-    imageUrl:
-        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500",
-  ),
-  Category(
-    name: "Sports",
-    imageUrl:
-        "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=500",
-  ),
-  Category(
-    name: "Books",
-    imageUrl:
-        "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500",
-  ),
-  Category(
-    name: "Groceries",
-    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500",
-  ),
-  // Category(
-  //   name: "Health",
-  //   imageUrl:
-  //       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500",
-  // ),
-  Category(
-    name: "Jewelry",
-    imageUrl:
-        "https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=500",
-  ),
-  Category(
-    name: "Watches",
-    imageUrl:
-        "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500",
-  ),
-  Category(
-    name: "Bags",
-    imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
-  ),
-  Category(
-    name: "Shoes",
-    imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
-  ),
-  Category(
-    name: "Toys",
-    imageUrl:
-        "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=500",
-  ),
-  Category(
-    name: "Pet Supplies",
-    imageUrl:
-        "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=500",
-  ),
-  Category(
-    name: "Automotive",
-    imageUrl:
-        "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500",
-  ),
-  Category(
-    name: "Office",
-    imageUrl:
-        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=500",
-  ),
-  Category(
-    name: "Garden",
-    imageUrl:
-        "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=500",
-  ),
-  Category(
-    name: "Kitchen",
-    imageUrl: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=500",
-  ),
-  Category(
-    name: "Gaming",
-    imageUrl:
-        "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=500",
-  ),
-  Category(
-    name: "Music",
-    imageUrl:
-        "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500",
-  ),
-  Category(
-    name: "Travel",
-    imageUrl:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500",
-  ),
-  Category(
-    name: "Baby",
-    imageUrl:
-        "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=500",
-  ),
-];
+// final List<Category> categories = [
+//   Category(
+//     name: "Beauty",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500",
+//     id: '',
+//   ),
+//   // Category(
+//   //   name: "Fashion",
+//   //   imageUrl:
+//   //       "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500",
+//   // ),
+//   Category(
+//     name: "Kids",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Electronics",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Home & Living",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Furniture",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Sports",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Books",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Groceries",
+//     imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500",
+//     id: '',
+//   ),
+//   // Category(
+//   //   name: "Health",
+//   //   imageUrl:
+//   //       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500",
+//   // ),
+//   Category(
+//     name: "Jewelry",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Watches",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Bags",
+//     imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Shoes",
+//     imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Toys",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Pet Supplies",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Automotive",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Office",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Garden",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Kitchen",
+//     imageUrl: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Gaming",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Music",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Travel",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500",
+//     id: '',
+//   ),
+//   Category(
+//     name: "Baby",
+//     imageUrl:
+//         "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=500",
+//     id: '',
+//   ),
+// ];

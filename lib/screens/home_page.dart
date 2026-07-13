@@ -1,5 +1,7 @@
 import 'package:ecommerce_app3/constants/strings.dart';
+import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/screens/product_screen.dart';
+import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -11,6 +13,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  FirebaseService firebase = FirebaseService();
+  List<Category> categories = [];
+  @override
+  void initState() {
+    getCategories();
+    super.initState();
+  }
+
+  Future<void> getCategories() async {
+    categories = await firebase.getCategory();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
