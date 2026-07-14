@@ -1,3 +1,4 @@
+import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase;
@@ -15,7 +16,9 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   List<Category> categories = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
-  void addCategory(BuildContext context) {
+  void addCategory(BuildContext context, Category? cat) {
+    nameController.text = cat?.name ?? "";
+    imageController.text = cat?.imageUrl ?? "";
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -26,7 +29,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
             children: [
               SizedBox(height: 10),
               Text(
-                "Add Category",
+                cat != null ? "Update Category" : "Add Category",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
@@ -53,12 +56,15 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   //   "Image": imageController.text,
                   // };
                   Category category = Category(
-                    id: "",
+                    id: cat != null ? cat.id : "",
                     name: nameController.text,
                     imageUrl: imageController.text,
                   );
-
-                  firebase.addCategory(category);
+                  if (cat != null) {
+                    firebase.updateCategory(category);
+                  } else {
+                    firebase.addCategory(category);
+                  }
                 },
                 child: Text("Add"),
               ),
@@ -88,7 +94,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       appBar: AppBar(title: Text("Add Category")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addCategory(context);
+          addCategory(context, null);
         },
         child: Icon(Icons.add),
       ),
@@ -97,7 +103,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
           crossAxisCount: 2, // Number of columns
           crossAxisSpacing: 10.0, // Horizontal space between items
           mainAxisSpacing: 10.0, // Vertical space between items
-          childAspectRatio: 0.9, // Width-to-height ratio of cells
+          childAspectRatio: 0.7, // Width-to-height ratio of cells
         ),
 
         itemCount: categories.length,
@@ -116,6 +122,12 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   ),
                 ),
                 Text(category.name),
+                ElevatedButton(
+                  onPressed: () {
+                    addCategory(context, category);
+                  },
+                  child: Text("Edit"),
+                ),
               ],
             ),
           );

@@ -1,24 +1,5 @@
 import 'package:ecommerce_app3/models/category_model.dart';
-
-class Product {
-  final String title;
-  final String subTitle;
-  final String category;
-  final String description;
-  final double rating;
-  final double price;
-  final String imageUrl;
-
-  Product({
-    required this.title,
-    required this.subTitle,
-    required this.category,
-    required this.description,
-    required this.rating,
-    required this.price,
-    required this.imageUrl,
-  });
-}
+import 'package:ecommerce_app3/models/product_model.dart';
 
 final List<Product> products = [
   Product(
@@ -31,6 +12,8 @@ final List<Product> products = [
     price: 19.99,
     imageUrl:
         "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Face Serum",
@@ -42,6 +25,8 @@ final List<Product> products = [
     price: 29.99,
     imageUrl:
         "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Luxury Perfume",
@@ -53,6 +38,8 @@ final List<Product> products = [
     price: 79.99,
     imageUrl:
         "https://images.unsplash.com/photo-1541643600914-78b084683601?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Men's Jacket",
@@ -64,6 +51,8 @@ final List<Product> products = [
     price: 89.99,
     imageUrl:
         "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Women's Dress",
@@ -75,6 +64,8 @@ final List<Product> products = [
     price: 69.99,
     imageUrl:
         "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Running Sneakers",
@@ -85,6 +76,8 @@ final List<Product> products = [
     rating: 4.7,
     price: 59.99,
     imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Kids T-Shirt",
@@ -96,6 +89,8 @@ final List<Product> products = [
     price: 14.99,
     imageUrl:
         "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Kids Shoes",
@@ -107,6 +102,8 @@ final List<Product> products = [
     price: 34.99,
     imageUrl:
         "https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Wireless Headphones",
@@ -118,6 +115,8 @@ final List<Product> products = [
     price: 129.99,
     imageUrl:
         "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Smart Watch",
@@ -129,6 +128,8 @@ final List<Product> products = [
     price: 199.99,
     imageUrl:
         "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Gaming Mouse",
@@ -140,6 +141,8 @@ final List<Product> products = [
     price: 49.99,
     imageUrl:
         "https://images.unsplash.com/photo-1527814050087-3793815479db?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Modern Sofa",
@@ -151,6 +154,8 @@ final List<Product> products = [
     price: 499.99,
     imageUrl:
         "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Coffee Maker",
@@ -162,6 +167,8 @@ final List<Product> products = [
     price: 89.99,
     imageUrl:
         "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Mountain Bike",
@@ -173,6 +180,8 @@ final List<Product> products = [
     price: 699.99,
     imageUrl:
         "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Leather Backpack",
@@ -183,6 +192,8 @@ final List<Product> products = [
     rating: 4.7,
     price: 74.99,
     imageUrl: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Classic Wrist Watch",
@@ -194,6 +205,8 @@ final List<Product> products = [
     price: 159.99,
     imageUrl:
         "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Cookware Set",
@@ -204,6 +217,8 @@ final List<Product> products = [
     rating: 4.6,
     price: 119.99,
     imageUrl: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Novel Collection",
@@ -215,6 +230,8 @@ final List<Product> products = [
     price: 39.99,
     imageUrl:
         "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Yoga Mat",
@@ -226,6 +243,8 @@ final List<Product> products = [
     price: 24.99,
     imageUrl:
         "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500",
+    id: '',
+    categoryId: '',
   ),
   Product(
     title: "Indoor Plant",
@@ -237,6 +256,8 @@ final List<Product> products = [
     price: 22.99,
     imageUrl:
         "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=500",
+    id: '',
+    categoryId: '',
   ),
 ];
 

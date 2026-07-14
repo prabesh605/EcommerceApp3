@@ -141,16 +141,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   onPressed: () {
                     /// Login Function
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => NavigationScreen(),
-                    //   ),
-                    // );
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AdminDasboard()),
+                      MaterialPageRoute(
+                        builder: (context) => NavigationScreen(),
+                      ),
                     );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => AdminDasboard()),
+                    // );
                   },
 
                   child: Text(
@@ -162,7 +162,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AdminDasboard()),
+                  );
+                },
+                child: Text("Admin"),
+              ),
               const SizedBox(height: 35),
 
               Row(

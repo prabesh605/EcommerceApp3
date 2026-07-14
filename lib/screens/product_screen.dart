@@ -1,4 +1,5 @@
 import 'package:ecommerce_app3/constants/strings.dart';
+import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
