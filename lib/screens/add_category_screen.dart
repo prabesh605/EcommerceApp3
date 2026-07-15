@@ -1,7 +1,6 @@
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
-import 'package:firebase_core/firebase_core.dart' as firebase;
 import 'package:flutter/material.dart';
 
 class AddCategoryScreen extends StatefulWidget {
@@ -16,9 +15,11 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   List<Category> categories = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
+
   void addCategory(BuildContext context, Category? cat) {
     nameController.text = cat?.name ?? "";
     imageController.text = cat?.imageUrl ?? "";
+
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -27,48 +28,48 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 cat != null ? "Update Category" : "Add Category",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   label: Text("Name"),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: imageController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  label: Text("Image"),
+                  label: Text("Image URL"),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () {
-                  // Map<String, dynamic> category = {
-                  //   'Name': nameController.text,
-                  //   "Image": imageController.text,
-                  // };
+                onPressed: () async {
                   Category category = Category(
                     id: cat != null ? cat.id : "",
                     name: nameController.text,
                     imageUrl: imageController.text,
                   );
+
                   if (cat != null) {
-                    firebase.updateCategory(category);
+                    await firebase.updateCategory(category);
                   } else {
-                    firebase.addCategory(category);
+                    await firebase.addCategory(category);
                   }
+
+                  await getCategory();
+                  Navigator.pop(context);
                 },
-                child: Text("Add"),
+                child: Text(cat != null ? "Update" : "Add"),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         );
@@ -79,7 +80,6 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   Future<void> getCategory() async {
     categories = await firebase.getCategory();
     setState(() {});
-    print(categories);
   }
 
   @override
@@ -91,50 +91,84 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Category")),
+      appBar: AppBar(title: const Text("Add Category")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           addCategory(context, null);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns
-          crossAxisSpacing: 10.0, // Horizontal space between items
-          mainAxisSpacing: 10.0, // Vertical space between items
-          childAspectRatio: 0.7, // Width-to-height ratio of cells
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          childAspectRatio: 0.85,
         ),
-
         itemCount: categories.length,
         itemBuilder: (context, index) {
           Category category = categories[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(12),
-                  child: SizedBox(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Image.network(category.imageUrl, fit: BoxFit.cover),
+          return Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 120,
+                      width: double.infinity,
+                      child: Image.network(category.imageUrl, fit: BoxFit.cover),
+                    ),
                   ),
-                ),
-                Text(category.name),
-                ElevatedButton(
-                  onPressed: () {
-                    addCategory(context, category);
-                  },
-                  child: Text("Edit"),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    category.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    height: 28,
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                      ),
+                      onPressed: () {
+                        addCategory(context, category);
+                      },
+                      child: const Text("Edit", style: TextStyle(fontSize: 11)),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    height: 28,
+                    width: double.infinity,
+
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.zero,
+                      ),
+                      onPressed: () async {
+                        await firebase.deletCatagory(category.id);
+                        await getCategory();
+                      },
+                      child: const Text("Delete", style: TextStyle(color: Colors.white, fontSize: 11)),
+                    ),
+
+                  ),
+                ],
+              ),
             ),
           );
-          // return CircleAvatar(
-          //   radius: 80,
-          //   backgroundImage: NetworkImage(product.imageUrl),
-          // );
         },
       ),
     );

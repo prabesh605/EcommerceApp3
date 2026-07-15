@@ -7,7 +7,7 @@ class FirebaseService {
   String categoryCollection = "category";
   String productCollection = "product";
 
-  //category
+  // Category add karna
   Future<void> addCategory(Category category) async {
     try {
       await db.collection(categoryCollection).add(category.toJson());
@@ -16,7 +16,7 @@ class FirebaseService {
     }
   }
 
-  //product
+  // Product add karna
   Future<void> addProduct(Product product) async {
     try {
       await db.collection(productCollection).add(product.toJson());
@@ -25,6 +25,7 @@ class FirebaseService {
     }
   }
 
+  // Category get karna
   Future<List<Category>> getCategory() async {
     try {
       QuerySnapshot querySnapshot = await db
@@ -33,17 +34,17 @@ class FirebaseService {
       List<Category> category = querySnapshot.docs
           .map(
             (doc) =>
-                Category.fromJson(doc.data() as Map<String, dynamic>, doc.id),
-          )
+            Category.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+      )
           .toList();
       return category;
     } catch (e) {
       print(e.toString());
-      // e.toString();
       return [];
     }
   }
 
+  // Product get karna
   Future<List<Product>> getProduct() async {
     try {
       QuerySnapshot querySnapshot = await db
@@ -52,8 +53,8 @@ class FirebaseService {
       List<Product> product = querySnapshot.docs
           .map(
             (doc) =>
-                Product.fromJson(doc.data() as Map<String, dynamic>, doc.id),
-          )
+            Product.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+      )
           .toList();
       return product;
     } catch (e) {
@@ -61,6 +62,7 @@ class FirebaseService {
     }
   }
 
+  // Category update karna (ID ke basis par)
   Future<void> updateCategory(Category category) async {
     try {
       await db
@@ -71,4 +73,19 @@ class FirebaseService {
       throw e.toString();
     }
   }
+// delet catogary
+Future <void> deletCatagory (String id )async {
+  try {
+    await db.collection(categoryCollection).doc(id).delete();
+  } catch (e) {
+    throw e.toString();
+  }
+
+    }
+
 }
+
+
+
+
+
