@@ -71,4 +71,15 @@ class FirebaseService {
       throw e.toString();
     }
   }
+
+  Future<void> updateProduct(Product product) async {
+    try {
+      await db
+          .collection(productCollection)
+          .doc(product.id)
+          .update(product.toJson());
+    } catch (e) {
+      e.toString();
+    }
+  }
 }

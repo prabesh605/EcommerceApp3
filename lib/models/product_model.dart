@@ -27,8 +27,8 @@ class Product {
       subTitle: json['subTitle'],
       category: json['category'],
       description: json['description'],
-      rating: json['rating'],
-      price: json['price'],
+      rating: (json['rating'] as num)?.toDouble() ?? 0.0,
+      price: (json['price'] as num)?.toDouble() ?? 0.0,
       imageUrl: json['imageUrl'],
       categoryId: json['categoryId'],
     );

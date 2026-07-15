@@ -1,7 +1,11 @@
+import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
+import 'package:ecommerce_app3/bloc/product/product_event.dart';
+import 'package:ecommerce_app3/bloc/product/product_state.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -12,8 +16,9 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   FirebaseService firebase = FirebaseService();
+  Category? selectedCategory;
   List<Category> categories = [];
-  List<Product> products = [];
+
   TextEditingController titleController = TextEditingController();
   TextEditingController subtitleController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
@@ -22,7 +27,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController ratingController = TextEditingController(text: "5");
   TextEditingController priceController = TextEditingController();
   TextEditingController imageController = TextEditingController();
-  void addCategory(BuildContext context) {
+  void addCategory(BuildContext context, Product? product) {
+    // selectedCategory = categories.map((cat) => cat.id = product.id);
+    // selectedCategory = Category(
+    //   id: product?.id ?? "",
+    //   name: "name",
+    //   imageUrl: "imageUrl",
+    // );
+    titleController.text = product?.title ?? "";
+    subtitleController.text = product?.subTitle ?? "";
+    categoryController.text = product?.category ?? "";
+    categoryIdController.text = product?.categoryId ?? "";
+    descriptionController.text = product?.description ?? "";
+    ratingController.text = "${product?.rating ?? "0"}";
+    priceController.text = "${product?.price ?? "0"}";
+    imageController.text = product?.imageUrl ?? "";
+
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -34,7 +54,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 SizedBox(height: 10),
                 Text(
-                  "Add Product",
+                  product != null ? "Update Product" : "Add Product",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
@@ -67,9 +87,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     border: Border.all(),
                   ),
                   child: DropdownButton(
+                    // value: selectedCategory,
                     padding: EdgeInsets.all(6),
                     borderRadius: BorderRadius.circular(12),
                     isExpanded: true,
+
                     items: categories
                         .map(
                           (cat) => DropdownMenuItem(
@@ -84,7 +106,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     // ],
                     onChanged: (value) {
                       print(value);
-                      categoryIdController.text = value ?? "";
+                      categoryIdController.text = "$value";
                     },
                   ),
                 ),
@@ -124,8 +146,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 SizedBox(height: 10),
                 OutlinedButton(
                   onPressed: () {
-                    Product product = Product(
-                      id: '',
+                    Product prod = Product(
+                      id: product != null ? product.id : '',
                       title: titleController.text,
                       subTitle: subtitleController.text,
                       category: categoryController.text,
@@ -135,11 +157,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       imageUrl: imageController.text,
                       categoryId: categoryIdController.text,
                     );
-                    firebase.addProduct(product);
-                    getProduct();
+                    product != null
+                        ? firebase.updateProduct(prod)
+                        : firebase.addProduct(prod);
+
                     Navigator.pop(context);
                   },
-                  child: Text("Add"),
+                  child: Text(product != null ? "Update" : "Add"),
                 ),
                 SizedBox(height: 10),
               ],
@@ -156,15 +180,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     print(categories);
   }
 
-  Future<void> getProduct() async {
-    products = await firebase.getProduct();
-    setState(() {});
-  }
-
   @override
   void initState() {
     getCategory();
-    getProduct();
+    context.read<ProductBloc>().add(GetProduct());
     super.initState();
   }
 
@@ -174,41 +193,61 @@ class _AddProductScreenState extends State<AddProductScreen> {
       appBar: AppBar(title: Text("Add Product")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addCategory(context);
+          addCategory(context, null);
         },
         child: Icon(Icons.add),
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns
-          crossAxisSpacing: 10.0, // Horizontal space between items
-          mainAxisSpacing: 10.0, // Vertical space between items
-          childAspectRatio: 0.9, // Width-to-height ratio of cells
-        ),
+      body: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is ProductLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is ProductError) {
+            return Center(child: Text("error"));
+          } else if (state is ProductLoaded) {
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Number of columns
+                crossAxisSpacing: 10.0, // Horizontal space between items
+                mainAxisSpacing: 10.0, // Vertical space between items
+                childAspectRatio: 0.8, // Width-to-height ratio of cells
+              ),
 
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          Product product = products[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(12),
-                  child: SizedBox(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Image.network(product.imageUrl, fit: BoxFit.cover),
+              itemCount: state.products.length,
+              itemBuilder: (context, index) {
+                Product product = state.products[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadiusGeometry.circular(12),
+                        child: SizedBox(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: Image.network(
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Text(product.title),
+                      OutlinedButton(
+                        onPressed: () {
+                          addCategory(context, product);
+                        },
+                        child: Text('Edit'),
+                      ),
+                    ],
                   ),
-                ),
-                Text(product.title),
-              ],
-            ),
-          );
-          // return CircleAvatar(
-          //   radius: 80,
-          //   backgroundImage: NetworkImage(product.imageUrl),
-          // );
+                );
+                // return CircleAvatar(
+                //   radius: 80,
+                //   backgroundImage: NetworkImage(product.imageUrl),
+                // );
+              },
+            );
+          }
+          return Container();
         },
       ),
     );
