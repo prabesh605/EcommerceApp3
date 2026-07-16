@@ -1,8 +1,13 @@
+import 'package:ecommerce_app3/bloc/category/category_bloc.dart';
+import 'package:ecommerce_app3/bloc/category/category_event.dart';
+import 'package:ecommerce_app3/bloc/category/category_state.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
+import 'package:ecommerce_app3/services/image_service.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddCategoryScreen extends StatefulWidget {
   const AddCategoryScreen({super.key});
@@ -12,8 +17,9 @@ class AddCategoryScreen extends StatefulWidget {
 }
 
 class _AddCategoryScreenState extends State<AddCategoryScreen> {
-  FirebaseService firebase = FirebaseService();
-  List<Category> categories = [];
+  // FirebaseService firebase = FirebaseService();
+  // List<Category> categories = [];
+  UploadImageService uploadImageService = UploadImageService();
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   void addCategory(BuildContext context, Category? cat) {
@@ -41,12 +47,24 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                 ),
               ),
               SizedBox(height: 10),
-              TextFormField(
-                controller: imageController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text("Image"),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: imageController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text("Image"),
+                      ),
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: () {
+                      uploadImageService.selectImage();
+                    },
+                    child: Text("Upload"),
+                  ),
+                ],
               ),
               SizedBox(height: 10),
               OutlinedButton(
@@ -61,10 +79,13 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     imageUrl: imageController.text,
                   );
                   if (cat != null) {
-                    firebase.updateCategory(category);
+                    context.read<CategoryBloc>().add(UpdateCategory(category));
+                    // firebase.updateCategory(category);
                   } else {
-                    firebase.addCategory(category);
+                    context.read<CategoryBloc>().add(AddCatgory(category));
+                    // firebase.addCategory(category);
                   }
+                  Navigator.pop(context);
                 },
                 child: Text("Add"),
               ),
@@ -77,9 +98,10 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   }
 
   Future<void> getCategory() async {
-    categories = await firebase.getCategory();
-    setState(() {});
-    print(categories);
+    context.read<CategoryBloc>().add(GetCategory());
+    // categories = await firebase.getCategory();
+    // setState(() {});
+    // print(categories);
   }
 
   @override
@@ -98,43 +120,60 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
         },
         child: Icon(Icons.add),
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns
-          crossAxisSpacing: 10.0, // Horizontal space between items
-          mainAxisSpacing: 10.0, // Vertical space between items
-          childAspectRatio: 0.7, // Width-to-height ratio of cells
-        ),
+      body: BlocBuilder<CategoryBloc, CategoryState>(
+        builder: (context, state) {
+          if (state is LoadingCategory) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is ErrorCategory) {
+            return Center(child: Text(state.error));
+          } else if (state is CategoryLoaded) {
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Number of columns
+                crossAxisSpacing: 10.0, // Horizontal space between items
+                mainAxisSpacing: 10.0, // Vertical space between items
+                childAspectRatio: 0.7, // Width-to-height ratio of cells
+              ),
 
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          Category category = categories[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(12),
-                  child: SizedBox(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Image.network(category.imageUrl, fit: BoxFit.cover),
+              itemCount: state.categories.length,
+              itemBuilder: (context, index) {
+                Category category = state.categories[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadiusGeometry.circular(12),
+                        child: SizedBox(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: Image.network(
+                            category.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(Icons.error);
+                            },
+                          ),
+                        ),
+                      ),
+                      Text(category.name),
+                      ElevatedButton(
+                        onPressed: () {
+                          addCategory(context, category);
+                        },
+                        child: Text("Edit"),
+                      ),
+                    ],
                   ),
-                ),
-                Text(category.name),
-                ElevatedButton(
-                  onPressed: () {
-                    addCategory(context, category);
-                  },
-                  child: Text("Edit"),
-                ),
-              ],
-            ),
-          );
-          // return CircleAvatar(
-          //   radius: 80,
-          //   backgroundImage: NetworkImage(product.imageUrl),
-          // );
+                );
+                // return CircleAvatar(
+                //   radius: 80,
+                //   backgroundImage: NetworkImage(product.imageUrl),
+                // );
+              },
+            );
+          }
+          return Container();
         },
       ),
     );

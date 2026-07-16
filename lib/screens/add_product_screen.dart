@@ -1,8 +1,12 @@
+import 'package:ecommerce_app3/bloc/category/category_bloc.dart';
+import 'package:ecommerce_app3/bloc/category/category_event.dart';
+import 'package:ecommerce_app3/bloc/category/category_state.dart';
 import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
 import 'package:ecommerce_app3/bloc/product/product_event.dart';
 import 'package:ecommerce_app3/bloc/product/product_state.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,9 +19,9 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  FirebaseService firebase = FirebaseService();
+  // FirebaseService firebase = FirebaseService();
   Category? selectedCategory;
-  List<Category> categories = [];
+  // List<Category> categories = [];
 
   TextEditingController titleController = TextEditingController();
   TextEditingController subtitleController = TextEditingController();
@@ -81,34 +85,45 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 //     label: Text("Category"),
                 //   ),
                 // ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(),
-                  ),
-                  child: DropdownButton(
-                    // value: selectedCategory,
-                    padding: EdgeInsets.all(6),
-                    borderRadius: BorderRadius.circular(12),
-                    isExpanded: true,
+                BlocBuilder<CategoryBloc, CategoryState>(
+                  builder: (context, state) {
+                    if (state is LoadingCategory) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state is ErrorCategory) {
+                      return Center(child: Text(state.error));
+                    } else if (state is CategoryLoaded) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(),
+                        ),
+                        child: DropdownButton(
+                          // value: selectedCategory,
+                          padding: EdgeInsets.all(6),
+                          borderRadius: BorderRadius.circular(12),
+                          isExpanded: true,
 
-                    items: categories
-                        .map(
-                          (cat) => DropdownMenuItem(
-                            value: cat.id,
-                            child: Text(cat.name),
-                          ),
-                        )
-                        .toList(),
-                    // items: [
-                    //   DropdownMenuItem(value: 1, child: Text("category1")),
-                    //   DropdownMenuItem(value: 2, child: Text("category2")),
-                    // ],
-                    onChanged: (value) {
-                      print(value);
-                      categoryIdController.text = "$value";
-                    },
-                  ),
+                          items: state.categories
+                              .map(
+                                (cat) => DropdownMenuItem(
+                                  value: cat.id,
+                                  child: Text(cat.name),
+                                ),
+                              )
+                              .toList(),
+                          // items: [
+                          //   DropdownMenuItem(value: 1, child: Text("category1")),
+                          //   DropdownMenuItem(value: 2, child: Text("category2")),
+                          // ],
+                          onChanged: (value) {
+                            print(value);
+                            categoryIdController.text = "$value";
+                          },
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
                 ),
                 SizedBox(height: 10),
                 TextFormField(
@@ -157,10 +172,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       imageUrl: imageController.text,
                       categoryId: categoryIdController.text,
                     );
-                    product != null
-                        ? firebase.updateProduct(prod)
-                        : firebase.addProduct(prod);
+                    // product != null
+                    //     ? firebase.updateProduct(prod)
+                    //     : firebase.addProduct(prod);
 
+                    product != null
+                        ? context.read<ProductBloc>().add(EditProduct(prod))
+                        : context.read<ProductBloc>().add(AddProduct(prod));
                     Navigator.pop(context);
                   },
                   child: Text(product != null ? "Update" : "Add"),
@@ -175,9 +193,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Future<void> getCategory() async {
-    categories = await firebase.getCategory();
-    setState(() {});
-    print(categories);
+    context.read<CategoryBloc>().add(GetCategory());
   }
 
   @override
