@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class UploadImageService {
   final url = Uri.parse('https://api.cloudinary.com/v1_1/dndihenwf/upload');
@@ -19,6 +21,20 @@ class UploadImageService {
       return url;
     } else {
       return '';
+    }
+  }
+
+  Future<String> firebaseUpload(String filePath) async {
+    try {
+      // String fileName = 'uploads/abc.jpg';
+      String fileName = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageRef.putFile(File(filePath));
+      TaskSnapshot snapshot = await uploadTask;
+      String url = await snapshot.ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      throw e.toString();
     }
   }
 

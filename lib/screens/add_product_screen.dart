@@ -143,12 +143,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 SizedBox(height: 10),
-                TextFormField(
-                  controller: imageController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text("Image"),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: imageController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          label: Text("Image"),
+                        ),
+                      ),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        //
+                      },
+                      child: Text("Upload"),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 10),
                 TextFormField(

@@ -1,6 +1,9 @@
 import 'package:ecommerce_app3/bloc/category/category_bloc.dart';
 import 'package:ecommerce_app3/bloc/category/category_event.dart';
 import 'package:ecommerce_app3/bloc/category/category_state.dart';
+import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_bloc.dart';
+import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_event.dart';
+import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_state.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
@@ -60,7 +63,8 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   ),
                   OutlinedButton(
                     onPressed: () {
-                      uploadImageService.selectImage();
+                      // uploadImageService.selectImage();
+                      context.read<ImageuploadBloc>().add(UploadImage());
                     },
                     child: Text("Upload"),
                   ),
@@ -120,61 +124,80 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
         },
         child: Icon(Icons.add),
       ),
-      body: BlocBuilder<CategoryBloc, CategoryState>(
-        builder: (context, state) {
-          if (state is LoadingCategory) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is ErrorCategory) {
-            return Center(child: Text(state.error));
-          } else if (state is CategoryLoaded) {
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns
-                crossAxisSpacing: 10.0, // Horizontal space between items
-                mainAxisSpacing: 10.0, // Vertical space between items
-                childAspectRatio: 0.7, // Width-to-height ratio of cells
-              ),
-
-              itemCount: state.categories.length,
-              itemBuilder: (context, index) {
-                Category category = state.categories[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(12),
-                        child: SizedBox(
-                          height: 150,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: Image.network(
-                            category.imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Icon(Icons.error);
-                            },
-                          ),
-                        ),
-                      ),
-                      Text(category.name),
-                      ElevatedButton(
-                        onPressed: () {
-                          addCategory(context, category);
-                        },
-                        child: Text("Edit"),
-                      ),
-                    ],
-                  ),
-                );
-                // return CircleAvatar(
-                //   radius: 80,
-                //   backgroundImage: NetworkImage(product.imageUrl),
-                // );
+      body: BlocListener<ImageuploadBloc, ImageuploadState>(
+        listener: (context, state) {
+          if (state is ImageLoading) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(child: Text("Loading..."));
               },
             );
           }
-          return Container();
+          if (state is ImageLoaded) {
+            Navigator.pop(context);
+            imageController.text = state.url;
+          }
         },
+        child: BlocBuilder<CategoryBloc, CategoryState>(
+          builder: (context, state) {
+            if (state is LoadingCategory) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is ErrorCategory) {
+              return Center(child: Text(state.error));
+            } else if (state is CategoryLoaded) {
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Number of columns
+                  crossAxisSpacing: 10.0, // Horizontal space between items
+                  mainAxisSpacing: 10.0, // Vertical space between items
+                  childAspectRatio: 0.7, // Width-to-height ratio of cells
+                ),
+
+                itemCount: state.categories.length,
+                itemBuilder: (context, index) {
+                  Category category = state.categories[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(12),
+                          child: SizedBox(
+                            height: 150,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Image.network(
+                              category.imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Icon(Icons.error);
+                              },
+                            ),
+                          ),
+                        ),
+
+                        Text(category.name),
+                        Text("Sub Title"),
+                        ElevatedButton(
+                          onPressed: () {
+                            addCategory(context, category);
+                          },
+                          child: Text("Edit"),
+                        ),
+                      ],
+                    ),
+                  );
+                  // return CircleAvatar(
+                  //   radius: 80,
+                  //   backgroundImage: NetworkImage(product.imageUrl),
+                  // );
+                },
+              );
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }
