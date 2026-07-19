@@ -1,6 +1,9 @@
 import 'package:ecommerce_app3/bloc/category/category_bloc.dart';
 import 'package:ecommerce_app3/bloc/category/category_event.dart';
 import 'package:ecommerce_app3/bloc/category/category_state.dart';
+import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_bloc.dart';
+import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_event.dart';
+import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_state.dart';
 import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
 import 'package:ecommerce_app3/bloc/product/product_event.dart';
 import 'package:ecommerce_app3/bloc/product/product_state.dart';
@@ -157,6 +160,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     OutlinedButton(
                       onPressed: () {
                         //
+                        context.read<ImageuploadBloc>().add(UploadImage());
                       },
                       child: Text("Upload"),
                     ),
@@ -225,58 +229,74 @@ class _AddProductScreenState extends State<AddProductScreen> {
         },
         child: Icon(Icons.add),
       ),
-      body: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          if (state is ProductLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is ProductError) {
-            return Center(child: Text("error"));
-          } else if (state is ProductLoaded) {
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns
-                crossAxisSpacing: 10.0, // Horizontal space between items
-                mainAxisSpacing: 10.0, // Vertical space between items
-                childAspectRatio: 0.8, // Width-to-height ratio of cells
-              ),
-
-              itemCount: state.products.length,
-              itemBuilder: (context, index) {
-                Product product = state.products[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(12),
-                        child: SizedBox(
-                          height: 150,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: Image.network(
-                            product.imageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Text(product.title),
-                      OutlinedButton(
-                        onPressed: () {
-                          addCategory(context, product);
-                        },
-                        child: Text('Edit'),
-                      ),
-                    ],
-                  ),
-                );
-                // return CircleAvatar(
-                //   radius: 80,
-                //   backgroundImage: NetworkImage(product.imageUrl),
-                // );
+      body: BlocListener<ImageuploadBloc, ImageuploadState>(
+        listener: (context, state) {
+          if (state is ImageLoading) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(child: Text("Loading..."));
               },
             );
           }
-          return Container();
+          if (state is ImageLoaded) {
+            Navigator.pop(context);
+            imageController.text = state.url;
+          }
         },
+        child: BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, state) {
+            if (state is ProductLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is ProductError) {
+              return Center(child: Text("error"));
+            } else if (state is ProductLoaded) {
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Number of columns
+                  crossAxisSpacing: 10.0, // Horizontal space between items
+                  mainAxisSpacing: 10.0, // Vertical space between items
+                  childAspectRatio: 0.8, // Width-to-height ratio of cells
+                ),
+
+                itemCount: state.products.length,
+                itemBuilder: (context, index) {
+                  Product product = state.products[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(12),
+                          child: SizedBox(
+                            height: 150,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Image.network(
+                              product.imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Text(product.title),
+                        OutlinedButton(
+                          onPressed: () {
+                            addCategory(context, product);
+                          },
+                          child: Text('Edit'),
+                        ),
+                      ],
+                    ),
+                  );
+                  // return CircleAvatar(
+                  //   radius: 80,
+                  //   backgroundImage: NetworkImage(product.imageUrl),
+                  // );
+                },
+              );
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

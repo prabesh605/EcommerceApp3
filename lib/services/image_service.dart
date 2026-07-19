@@ -45,4 +45,12 @@ class UploadImageService {
     // uploadImage(image!.path);
     return imagePath;
   }
+
+  Future<String> selectImageCamera() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    String imagePath = image!.path;
+    // uploadImage(image!.path);
+    return imagePath;
+  }
 }

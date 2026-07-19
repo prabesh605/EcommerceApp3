@@ -1,6 +1,10 @@
+import 'package:ecommerce_app3/bloc/cart/cart_bloc.dart';
+import 'package:ecommerce_app3/bloc/cart/cart_event.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
+import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -12,6 +16,7 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  int count = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,14 +54,53 @@ class _ProductScreenState extends State<ProductScreen> {
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
               SizedBox(height: 5),
-              RatingBar.builder(
-                allowHalfRating: true,
-                ignoreGestures: true,
-                initialRating: widget.product.rating,
-                itemBuilder: (context, _) =>
-                    Icon(Icons.star, color: Colors.amber),
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RatingBar.builder(
+                    allowHalfRating: true,
+                    ignoreGestures: true,
+                    initialRating: widget.product.rating,
+                    itemBuilder: (context, _) =>
+                        Icon(Icons.star, color: Colors.amber),
 
-                onRatingUpdate: (value) {},
+                    onRatingUpdate: (value) {},
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(width: 60),
+                      IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (count > 0 && count <= 10) {
+                              count++;
+                            }
+                          });
+                        },
+                        icon: Icon(Icons.add),
+                      ),
+                      SizedBox(width: 5),
+                      Text("$count"),
+                      SizedBox(width: 5),
+                      IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (count > 1) {
+                              count--;
+                            }
+                          });
+                        },
+                        icon: Icon(Icons.remove),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(height: 5),
               Text(
@@ -77,21 +121,40 @@ class _ProductScreenState extends State<ProductScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.blue,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.shopping_cart, color: Colors.white),
-                          Text(
-                            "Go To Cart",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                    child: GestureDetector(
+                      onTap: () {
+                        CartModel toCart = CartModel(
+                          id: widget.product.id,
+                          title: widget.product.title,
+                          subTitle: widget.product.subTitle,
+                          category: widget.product.category,
+                          categoryId: widget.product.categoryId,
+                          description: widget.product.description,
+                          rating: widget.product.rating,
+                          price: widget.product.price,
+                          imageUrl: widget.product.imageUrl,
+                          user: '',
+                          quantity: count,
+                        );
+                        context.read<CartBloc>().add(AddToCart(toCart));
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.blue,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.shopping_cart, color: Colors.white),
+                            Text(
+                              "Go To Cart",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

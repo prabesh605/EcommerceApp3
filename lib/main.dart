@@ -1,3 +1,4 @@
+import 'package:ecommerce_app3/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_app3/bloc/category/category_bloc.dart';
 import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_bloc.dart';
 import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ProductBloc()),
         BlocProvider(create: (BuildContext context) => CategoryBloc()),
         BlocProvider(create: (BuildContext context) => ImageuploadBloc()),
+        BlocProvider(create: (BuildContext context) => CartBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
