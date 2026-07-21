@@ -1,8 +1,11 @@
 import 'package:ecommerce_app3/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_app3/bloc/cart/cart_event.dart';
+import 'package:ecommerce_app3/bloc/wishlist/wishlist_bloc.dart';
+import 'package:ecommerce_app3/bloc/wishlist/wishlist_event.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
+import 'package:ecommerce_app3/models/wishlist_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -35,12 +38,50 @@ class _ProductScreenState extends State<ProductScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.3,
                 width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    widget.product.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.product.imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      right: 10,
+                      top: 10,
+                      child: IconButton(
+                        onPressed: () {
+                          WishListModel wishlist = WishListModel(
+                            id: '',
+                            title: widget.product.title,
+                            subTitle: widget.product.subTitle,
+                            category: widget.product.category,
+                            description: widget.product.description,
+                            rating: widget.product.rating,
+                            price: widget.product.price,
+                            imageUrl: widget.product.imageUrl,
+                            categoryId: widget.product.categoryId,
+                            productID: widget.product.id,
+                          );
+                          context.read<WishlistBloc>().add(
+                            AddToWishList(wishlist),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text("Product added to Wishlist"),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.favorite_border_outlined,
+                          color: Colors.red,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20),

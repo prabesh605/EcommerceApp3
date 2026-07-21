@@ -2,6 +2,7 @@ import 'package:ecommerce_app3/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_app3/bloc/category/category_bloc.dart';
 import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_bloc.dart';
 import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
+import 'package:ecommerce_app3/bloc/wishlist/wishlist_bloc.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => CategoryBloc()),
         BlocProvider(create: (BuildContext context) => ImageuploadBloc()),
         BlocProvider(create: (BuildContext context) => CartBloc()),
+        BlocProvider(create: (BuildContext context) => WishlistBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
