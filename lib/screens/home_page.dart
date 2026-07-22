@@ -1,5 +1,6 @@
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
+import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:ecommerce_app3/screens/product_screen.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,24 @@ class _HomePageState extends State<HomePage> {
           SizedBox(width: 5),
         ],
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(leading: Icon(Icons.home), title: Text("Home")),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text("Logout"),
+              onTap: () async {
+                await firebase.logout();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(

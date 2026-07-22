@@ -1,9 +1,10 @@
 import 'package:ecommerce_app3/screens/forgot_password.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
+import 'package:ecommerce_app3/screens/navigation_screen.dart';
+import 'package:ecommerce_app3/services/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,7 +18,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
+  FirebaseService firebaseService = FirebaseService();
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
 
@@ -42,7 +43,6 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               const SizedBox(height: 40),
 
               Text(
@@ -99,9 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() {
@@ -135,8 +133,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        obscureConfirmPassword =
-                            !obscureConfirmPassword;
+                        obscureConfirmPassword = !obscureConfirmPassword;
                       });
                     },
                   ),
@@ -162,7 +159,25 @@ class _SignupScreenState extends State<SignupScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    if (emailController.text.isNotEmpty &&
+                        passwordController.text.isNotEmpty &&
+                        nameController.text.isNotEmpty) {
+                      UserCredential userCredential = await firebaseService
+                          .signUp(
+                            emailController.text,
+                            passwordController.text,
+                            nameController.text,
+                          );
+                      if (userCredential.user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NavigationScreen(),
+                          ),
+                        );
+                      }
+                    }
                     // Firebase Signup
                   },
                   child: Text(
@@ -179,19 +194,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Row(
                 children: [
-
                   const Expanded(child: Divider()),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      "Continue with",
-                      style: GoogleFonts.poppins(),
-                    ),
+                    child: Text("Continue with", style: GoogleFonts.poppins()),
                   ),
 
                   const Expanded(child: Divider()),
-
                 ],
               ),
 
@@ -199,8 +209,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Center(
                 child: InkWell(
-                  onTap: () {                 
-
+                  onTap: () {
                     // Google Sign In
                   },
                   child: Container(
@@ -227,7 +236,6 @@ class _SignupScreenState extends State<SignupScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   const Text("Already have an account? "),
 
                   GestureDetector(
@@ -242,12 +250,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-
                 ],
               ),
 
               const SizedBox(height: 30),
-
             ],
           ),
         ),

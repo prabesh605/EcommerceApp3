@@ -2,6 +2,7 @@ import 'package:ecommerce_app3/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_app3/bloc/cart/cart_event.dart';
 import 'package:ecommerce_app3/bloc/wishlist/wishlist_bloc.dart';
 import 'package:ecommerce_app3/bloc/wishlist/wishlist_event.dart';
+import 'package:ecommerce_app3/bloc/wishlist/wishlist_state.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
@@ -20,6 +21,12 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   int count = 1;
+  @override
+  void initState() {
+    context.read<WishlistBloc>().add(GetWishListByProductId(widget.product.id));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,10 +81,29 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
                           );
                         },
-                        icon: Icon(
-                          Icons.favorite_border_outlined,
-                          color: Colors.red,
-                          size: 30,
+                        icon: BlocBuilder<WishlistBloc, WishlistState>(
+                          builder: (context, state) {
+                            if (state is LoadingWishList) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (state is ContainWishlist) {
+                              return Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 30,
+                              );
+                            } else if (state is DoesnotContainWishlist) {
+                              return Icon(
+                                Icons.favorite_border_outlined,
+                                color: Colors.red,
+                                size: 30,
+                              );
+                            }
+                            return Icon(
+                              Icons.favorite_border_outlined,
+                              color: Colors.red,
+                              size: 30,
+                            );
+                          },
                         ),
                       ),
                     ),

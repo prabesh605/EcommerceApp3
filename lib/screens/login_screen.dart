@@ -3,6 +3,8 @@ import 'package:ecommerce_app3/screens/admin_dasboard.dart';
 import 'package:ecommerce_app3/screens/forgot_password.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
 import 'package:ecommerce_app3/screens/signup_screen.dart';
+import 'package:ecommerce_app3/services/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,8 +18,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
+  FirebaseService firebaseService = FirebaseService();
   bool obscureText = true;
+
+  @override
+  void initState() {
+    getInfo();
+    super.initState();
+  }
+
+  Future<void> getInfo() async {
+    User? user = await firebaseService.getLoginUserInfo();
+    print(user);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,14 +152,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  onPressed: () {
+                  onPressed: () async {
+                    if (emailController.text.isNotEmpty &&
+                        passwordController.text.isNotEmpty) {
+                      UserCredential user = await firebaseService.login(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                      if (user.user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NavigationScreen(),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Enter email and password")),
+                      );
+                    }
+
                     /// Login Function
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NavigationScreen(),
-                      ),
-                    );
+
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => AdminDasboard()),

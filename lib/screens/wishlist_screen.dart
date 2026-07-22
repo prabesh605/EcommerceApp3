@@ -74,33 +74,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                   wishlist.subTitle,
                                   style: TextStyle(fontSize: 16),
                                 ),
-
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.add),
-                                      style: IconButton.styleFrom(
-                                        backgroundColor: Colors.grey,
-                                        shape: CircleBorder(),
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text("5"),
-                                    SizedBox(width: 4),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.remove),
-                                      style: IconButton.styleFrom(
-                                        backgroundColor: Colors.grey,
-                                        shape: CircleBorder(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                SizedBox(height: 10),
                                 Text(
-                                  "Quantity: 4",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  wishlist.description,
+                                  maxLines: 4,
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ],
                             ),

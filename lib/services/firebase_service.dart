@@ -3,6 +3,7 @@ import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/models/wishlist_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -10,6 +11,7 @@ class FirebaseService {
   String productCollection = "product";
   String cartCollection = "cart";
   String wishListCollection = 'wishlist';
+  String userCollection = "users";
 
   //category
   Future<void> addCategory(Category category) async {
@@ -151,9 +153,84 @@ class FirebaseService {
   }
 
   //byid
-  // Future<WishListModel> getWishlistByProductID(String id) async {
-  //   try {} catch (e) {
-  //     throw e.toString();
-  //   }
-  // }
+  Future<WishListModel?> getWishlistByProductID(String productID) async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection(wishListCollection)
+          .where('productID', isEqualTo: productID)
+          .get();
+      WishListModel wishlist = WishListModel.fromJson(
+        querySnapshot.docs.first.data() as Map<String, dynamic>,
+        querySnapshot.docs.first.id,
+      );
+      if (wishlist != null) {
+        return wishlist;
+      }
+    } catch (e) {
+      print(e.toString());
+      return null;
+      // throw e.toString();
+    }
+  }
+
+  //login
+  Future<UserCredential> login(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      print(userCredential);
+
+      return userCredential;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<UserCredential> signUp(
+    String email,
+    String password,
+    String userName,
+  ) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await userCredential.user?.updateDisplayName(userName);
+
+      print(userCredential);
+
+      var userData = {
+        'userID': '${userCredential.user?.uid}',
+        'email': email,
+        'password': password,
+        'userName': userName,
+        'userGroup': 'user',
+        'createdAt': DateTime.now(),
+      };
+      await db
+          .collection(userCollection)
+          .doc(userCredential.user?.uid)
+          .set(userData);
+
+      return userCredential;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<User?> getLoginUserInfo() async {
+    try {
+      User? user = await FirebaseAuth.instance.currentUser;
+      return user;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

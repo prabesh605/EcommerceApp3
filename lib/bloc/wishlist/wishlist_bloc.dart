@@ -26,5 +26,16 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
       wishLists = await service.getAllWishList();
       emit(LoadedWishList(wishLists));
     });
+    on<GetWishListByProductId>((event, emit) async {
+      emit(LoadingWishList());
+      WishListModel? data = await service.getWishlistByProductID(
+        event.productID,
+      );
+      if (data != null) {
+        emit(ContainWishlist());
+      } else {
+        emit(DoesnotContainWishlist());
+      }
+    });
   }
 }

@@ -13,3 +13,12 @@ class LoadedWishList extends WishlistState {
   List<WishListModel> wishLists;
   LoadedWishList(this.wishLists);
 }
+
+class ContainWishlist extends WishlistState {}
+
+class DoesnotContainWishlist extends WishlistState {}
+
+// class WishlistById extends WishlistState {
+//   WishListModel wishLists;
+//   WishlistById(this.wishLists);
+// }
