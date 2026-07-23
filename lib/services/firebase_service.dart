@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
+import 'package:ecommerce_app3/models/order_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/models/wishlist_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ class FirebaseService {
   String cartCollection = "cart";
   String wishListCollection = 'wishlist';
   String userCollection = "users";
+  String orderCollection = 'orders';
 
   //category
   Future<void> addCategory(Category category) async {
@@ -31,23 +33,31 @@ class FirebaseService {
     }
   }
 
-  //cart
-  Future<void> addToCart(CartModel cart) async {
+  //order
+  Future<void> addOrder(OrderModel order) async {
     try {
-      await db.collection(cartCollection).add(cart.toJson());
-    } catch (e) {
-      e.toString();
-    }
-  }
-
-  //wishlist
-  Future<void> addWishList(WishListModel wishlist) async {
-    try {
-      await db.collection(wishListCollection).add(wishlist.toJson());
+      await db.collection(orderCollection).add(order.toJson());
     } catch (e) {
       throw e.toString();
     }
   }
+  //cart
+  // Future<void> addToCart(CartModel cart) async {
+  //   try {
+  //     await db.collection(cartCollection).add(cart.toJson());
+  //   } catch (e) {
+  //     e.toString();
+  //   }
+  // }
+
+  //wishlist
+  // Future<void> addWishList(WishListModel wishlist) async {
+  //   try {
+  //     await db.collection(wishListCollection).add(wishlist.toJson());
+  //   } catch (e) {
+  //     throw e.toString();
+  //   }
+  // }
 
   Future<List<Category>> getCategory() async {
     try {
@@ -85,9 +95,32 @@ class FirebaseService {
     }
   }
 
-  Future<List<CartModel>> getAllCarts() async {
+  // Future<List<CartModel>> getAllCarts() async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await db.collection(cartCollection).get();
+
+  //     return querySnapshot.docs
+  //         .map(
+  //           (doc) =>
+  //               CartModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+  //         )
+  //         .toList();
+  //     // return CartModel.fromJson(
+  //     //   querySnapshot.docs.first.data() as Map<String, dynamic>,
+  //     //   querySnapshot.docs.first.id,
+  //     // );
+  //   } catch (e) {
+  //     throw e.toString();
+  //   }
+  // }
+
+  Future<List<CartModel>> getAllUserCarts(String uid) async {
     try {
-      QuerySnapshot querySnapshot = await db.collection(cartCollection).get();
+      QuerySnapshot querySnapshot = await db
+          .collection(userCollection)
+          .doc(uid)
+          .collection(cartCollection)
+          .get();
 
       return querySnapshot.docs
           .map(
@@ -104,9 +137,29 @@ class FirebaseService {
     }
   }
 
-  Future<List<WishListModel>> getAllWishList() async {
+  // Future<List<WishListModel>> getAllWishList() async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await db
+  //         .collection(wishListCollection)
+  //         .get();
+  //     return querySnapshot.docs
+  //         .map(
+  //           (doc) => WishListModel.fromJson(
+  //             doc.data() as Map<String, dynamic>,
+  //             doc.id,
+  //           ),
+  //         )
+  //         .toList();
+  //   } catch (e) {
+  //     throw e.toString();
+  //   }
+  // }
+
+  Future<List<WishListModel>> getUserWishList(String uid) async {
     try {
       QuerySnapshot querySnapshot = await db
+          .collection(userCollection)
+          .doc(uid)
           .collection(wishListCollection)
           .get();
       return querySnapshot.docs
@@ -229,6 +282,30 @@ class FirebaseService {
     try {
       User? user = await FirebaseAuth.instance.currentUser;
       return user;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> addToUserCart(String userID, CartModel cart) async {
+    try {
+      await db
+          .collection(userCollection)
+          .doc(userID)
+          .collection(cartCollection)
+          .add(cart.toJson());
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> addToUserWishList(String userID, WishListModel wishlist) async {
+    try {
+      await db
+          .collection(userCollection)
+          .doc(userID)
+          .collection(wishListCollection)
+          .add(wishlist.toJson());
     } catch (e) {
       throw e.toString();
     }

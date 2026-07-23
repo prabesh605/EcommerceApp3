@@ -5,8 +5,11 @@ import 'package:ecommerce_app3/bloc/wishlist/wishlist_event.dart';
 import 'package:ecommerce_app3/bloc/wishlist/wishlist_state.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
+import 'package:ecommerce_app3/models/order_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/models/wishlist_model.dart';
+import 'package:ecommerce_app3/services/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -21,6 +24,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   int count = 1;
+  FirebaseService service = FirebaseService();
   @override
   void initState() {
     context.read<WishlistBloc>().add(GetWishListByProductId(widget.product.id));
@@ -227,21 +231,53 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   SizedBox(width: 20),
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.green,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.touch_app, color: Colors.white),
-                          Text(
-                            "Buy Now",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                    child: GestureDetector(
+                      onTap: () async {
+                        User? user = await service.getLoginUserInfo();
+                        if (user != null) {
+                          List<CartModel> product = [];
+                          CartModel pro = CartModel(
+                            id: '',
+                            title: widget.product.title,
+                            subTitle: widget.product.subTitle,
+                            category: widget.product.category,
+                            categoryId: widget.product.categoryId,
+                            description: widget.product.description,
+                            rating: widget.product.rating,
+                            price: widget.product.price,
+                            imageUrl: widget.product.imageUrl,
+                            user: '',
+                            quantity: count,
+                          );
+                          product.add(pro);
+                          OrderModel order = OrderModel(
+                            id: "id",
+                            products: product,
+                            total: 1000.0,
+                            createdDate: DateTime.now(),
+                            user: '1232',
+                            address: "Ktm",
+                            paymentDetail: "paymentDetail",
+                          );
+                          await service.addOrder(order);
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.green,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.touch_app, color: Colors.white),
+                            Text(
+                              "Buy Now",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

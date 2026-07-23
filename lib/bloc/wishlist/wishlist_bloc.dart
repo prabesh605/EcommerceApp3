@@ -3,6 +3,7 @@ import 'package:ecommerce_app3/bloc/wishlist/wishlist_state.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/models/wishlist_model.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
@@ -11,20 +12,35 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
   WishlistBloc() : super(InitialWishList()) {
     on<AddToWishList>((event, emit) async {
       emit(LoadingWishList());
-      await service.addWishList(event.wishListModel);
-      wishLists = await service.getAllWishList();
-      emit(LoadedWishList(wishLists));
+      User? user = await service.getLoginUserInfo();
+      if (user != null) {
+        await service.addToUserWishList(user.uid, event.wishListModel);
+        wishLists = await service.getUserWishList(user.uid);
+        emit(LoadedWishList(wishLists));
+      } else {
+        emit(ErrorWishList());
+      }
     });
     on<GetAllWishList>((event, emit) async {
       emit(LoadingWishList());
-      wishLists = await service.getAllWishList();
-      emit(LoadedWishList(wishLists));
+      User? user = await service.getLoginUserInfo();
+      if (user != null) {
+        wishLists = await service.getUserWishList(user.uid);
+        emit(LoadedWishList(wishLists));
+      } else {
+        emit(ErrorWishList());
+      }
     });
     on<DeleteWishList>((event, emit) async {
       emit(LoadingWishList());
       await service.deleteCart(event.id);
-      wishLists = await service.getAllWishList();
-      emit(LoadedWishList(wishLists));
+      User? user = await service.getLoginUserInfo();
+      if (user != null) {
+        wishLists = await service.getUserWishList(user.uid);
+        emit(LoadedWishList(wishLists));
+      } else {
+        emit(ErrorWishList());
+      }
     });
     on<GetWishListByProductId>((event, emit) async {
       emit(LoadingWishList());

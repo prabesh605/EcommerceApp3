@@ -5,6 +5,7 @@ import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
 import 'package:ecommerce_app3/bloc/wishlist/wishlist_bloc.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
+import 'package:ecommerce_app3/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const LoginScreen(),
+        home: SplashScreen(),
+        // home: const LoginScreen(),
       ),
     );
   }
