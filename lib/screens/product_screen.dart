@@ -255,7 +255,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             products: product,
                             total: 1000.0,
                             createdDate: DateTime.now(),
-                            user: '1232',
+                            user: user.uid,
                             address: "Ktm",
                             paymentDetail: "paymentDetail",
                           );

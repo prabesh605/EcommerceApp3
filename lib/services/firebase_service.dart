@@ -3,6 +3,7 @@ import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/order_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
+import 'package:ecommerce_app3/models/user_model.dart';
 import 'package:ecommerce_app3/models/wishlist_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -308,6 +309,42 @@ class FirebaseService {
           .add(wishlist.toJson());
     } catch (e) {
       throw e.toString();
+    }
+  }
+
+  Future<UserModel> getCurrentUserData(String uid) async {
+    try {
+      DocumentSnapshot documentSnapshot = await db
+          .collection(userCollection)
+          .doc(uid)
+          .get();
+
+      var data = UserModel.fromJson(
+        documentSnapshot.data() as Map<String, dynamic>,
+      );
+      print(data);
+      return data;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<List<OrderModel>> getMyOrder(String uid) async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection(orderCollection)
+          .where('user', isEqualTo: uid)
+          .get();
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
+      // throw e.toString();
     }
   }
 }

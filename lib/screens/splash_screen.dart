@@ -1,3 +1,5 @@
+import 'package:ecommerce_app3/models/user_model.dart';
+import 'package:ecommerce_app3/screens/admin_dasboard.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:ecommerce_app3/screens/navigation_screen.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
@@ -17,10 +19,20 @@ class _SplashScreenState extends State<SplashScreen> {
     User? user = await firebaseService.getLoginUserInfo();
     await Future.delayed(Duration(seconds: 2));
     if (user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => NavigationScreen()),
-      );
+      UserModel userData = await firebaseService.getCurrentUserData(user.uid);
+      if (userData.userGroup == 'admin') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AdminDasboard()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => NavigationScreen()),
+        );
+      }
+
+      //if usergroup = admin return AdminPanel else return NavigationScreen
     } else {
       Navigator.pushReplacement(
         context,

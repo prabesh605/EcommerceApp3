@@ -1,3 +1,4 @@
+import 'package:ecommerce_app3/screens/Setting_screen.dart';
 import 'package:ecommerce_app3/screens/cart_screen.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
 import 'package:ecommerce_app3/screens/search_screen.dart';
@@ -19,7 +20,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     WishlistScreen(),
     CartScreen(),
     SearchScreen(),
-    Center(child: Text('Settings')),
+    SettingScreen(),
   ];
   @override
   Widget build(BuildContext context) {

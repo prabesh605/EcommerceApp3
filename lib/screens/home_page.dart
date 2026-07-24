@@ -2,6 +2,7 @@ import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:ecommerce_app3/screens/product_screen.dart';
+import 'package:ecommerce_app3/screens/user_screen.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -41,7 +42,15 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Image.asset('assets/logo.png', height: 40),
         actions: [
-          CircleAvatar(backgroundColor: Colors.red, radius: 25),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserScreen()),
+              );
+            },
+            child: CircleAvatar(backgroundColor: Colors.red, radius: 25),
+          ),
           SizedBox(width: 5),
         ],
       ),

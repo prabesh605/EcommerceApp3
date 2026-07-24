@@ -1,5 +1,7 @@
 import 'package:ecommerce_app3/screens/add_category_screen.dart';
 import 'package:ecommerce_app3/screens/add_product_screen.dart';
+import 'package:ecommerce_app3/screens/login_screen.dart';
+import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
 class AdminDasboard extends StatefulWidget {
@@ -10,11 +12,26 @@ class AdminDasboard extends StatefulWidget {
 }
 
 class _AdminDasboardState extends State<AdminDasboard> {
-
+  FirebaseService service = FirebaseService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false, title: Text("Admin")),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text("Admin"),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await service.logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
