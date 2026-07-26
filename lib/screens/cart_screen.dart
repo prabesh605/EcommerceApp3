@@ -1,4 +1,5 @@
 import 'package:ecommerce_app3/bloc/cart/cart_bloc.dart';
+import 'package:ecommerce_app3/bloc/cart/cart_event.dart';
 import 'package:ecommerce_app3/bloc/cart/cart_state.dart';
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
@@ -13,6 +14,12 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    context.read<CartBloc>().add(GetAllCarts());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,32 +113,6 @@ class _CartScreenState extends State<CartScreen> {
               return Container();
             },
           ),
-
-          // Container(
-          //   margin: EdgeInsets.all(6),
-          //   padding: EdgeInsets.all(6),
-          //   decoration: BoxDecoration(
-          //     border: Border.all(),
-          //     borderRadius: BorderRadius.circular(12),
-          //   ),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Text(
-          //         "Total :Rs 10000",
-          //         style: TextStyle(fontWeight: FontWeight.bold),
-          //       ),
-          //       OutlinedButton(
-          //         style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
-          //         onPressed: () {},
-          //         child: Text(
-          //           "Order Now",
-          //           style: TextStyle(color: Colors.white),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

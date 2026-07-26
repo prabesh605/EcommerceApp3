@@ -80,6 +80,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                   maxLines: 4,
                                   style: TextStyle(fontSize: 16),
                                 ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context.read<WishlistBloc>().add(
+                                      DeleteWishList(wishlist.id),
+                                    );
+                                  },
+                                  child: Text('Delete'),
+                                ),
                               ],
                             ),
                             //image
