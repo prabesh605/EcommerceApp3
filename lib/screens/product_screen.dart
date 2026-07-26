@@ -258,6 +258,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             user: user.uid,
                             address: "Ktm",
                             paymentDetail: "paymentDetail",
+                            status: OrderStatus.orderPlaced,
                           );
                           await service.addOrder(order);
                         }

@@ -1,6 +1,15 @@
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 
+enum OrderStatus {
+  orderPlaced,
+  processing,
+  shipped,
+  outForDelivery,
+  delivered,
+  cancelled,
+}
+
 final List<Product> products = [
   Product(
     title: "Matte Lipstick",

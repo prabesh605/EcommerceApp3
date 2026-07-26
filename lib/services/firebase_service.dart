@@ -347,4 +347,18 @@ class FirebaseService {
       // throw e.toString();
     }
   }
+
+  Future<List<OrderModel>> getAllOrder() async {
+    try {
+      QuerySnapshot querySnapshot = await db.collection(orderCollection).get();
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
