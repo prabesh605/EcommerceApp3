@@ -1,5 +1,6 @@
 import 'package:ecommerce_app3/screens/add_category_screen.dart';
 import 'package:ecommerce_app3/screens/add_product_screen.dart';
+import 'package:ecommerce_app3/screens/admin_order_screen.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,27 @@ class _AdminDasboardState extends State<AdminDasboard> {
                 ),
               ],
             ),
-            Text("data"),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminOrderScreen()),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text("Orders", style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -37,7 +37,7 @@ class OrderModel {
       user: json['user'],
       address: json['address'],
       paymentDetail: json['paymentDetail'],
-      status: json['status'],
+      status: OrderStatus.values.byName(json['status']),
     );
   }
   Map<String, dynamic> toJson() => {

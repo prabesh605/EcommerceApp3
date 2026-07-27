@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/order_model.dart';
@@ -357,6 +358,35 @@ class FirebaseService {
                 OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
           )
           .toList();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> updateStatusOfOrder(String id, OrderStatus status) async {
+    try {
+      await db.collection(orderCollection).doc(id).update({
+        'status': status.name,
+      });
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<int> getTodayTotalOrder() async {
+    try {
+      final now = DateTime.now();
+      final startofToday = DateTime(now.year, now.month, now.day);
+      final startofTomorrow = startofToday.add(const Duration(days: 1));
+      QuerySnapshot querySnapshot = await db
+          .collection(orderCollection)
+          .where(
+            'createdDate',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startofToday),
+          )
+          .where('createdDate', isLessThan: Timestamp.fromDate(startofTomorrow))
+          .get();
+      return querySnapshot.docs.length;
     } catch (e) {
       throw e.toString();
     }
