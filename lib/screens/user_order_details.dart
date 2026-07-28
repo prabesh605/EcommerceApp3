@@ -1,3 +1,4 @@
+import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/order_model.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,30 @@ class UserOrderDetails extends StatefulWidget {
 }
 
 class _UserOrderDetailsState extends State<UserOrderDetails> {
+  int orderPosition(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.orderPlaced:
+        return 0;
+
+      case OrderStatus.processing:
+        return 1;
+
+      case OrderStatus.shipped:
+        return 2;
+
+      case OrderStatus.outForDelivery:
+        return 3;
+
+      case OrderStatus.delivered:
+        // Already completed
+        return 4;
+
+      case OrderStatus.cancelled:
+        // Cannot move forward from cancelled
+        return 5;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +58,18 @@ class _UserOrderDetailsState extends State<UserOrderDetails> {
             ),
           ),
           SizedBox(height: 20),
+          Stepper(
+            currentStep: orderPosition(widget.myOrder.status),
+
+            steps: OrderStatus.values
+                .map(
+                  (status) => Step(
+                    title: Text(status.name),
+                    content: Text(status.name),
+                  ),
+                )
+                .toList(),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: widget.myOrder.products.length,

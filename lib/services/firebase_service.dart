@@ -373,7 +373,7 @@ class FirebaseService {
     }
   }
 
-  Future<int> getTodayTotalOrder() async {
+  Future<List<OrderModel>> getTodayTotalOrder() async {
     try {
       final now = DateTime.now();
       final startofToday = DateTime(now.year, now.month, now.day);
@@ -386,7 +386,81 @@ class FirebaseService {
           )
           .where('createdDate', isLessThan: Timestamp.fromDate(startofTomorrow))
           .get();
-      return querySnapshot.docs.length;
+      // return querySnapshot.docs.length;
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<List<OrderModel>> getOrderPlacedData() async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection(orderCollection)
+          .where('status', isEqualTo: OrderStatus.orderPlaced.name)
+          .get();
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<List<OrderModel>> getProessingData() async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection(orderCollection)
+          .where('status', isEqualTo: OrderStatus.processing.name)
+          .get();
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<List<OrderModel>> getAllCancelData() async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection(orderCollection)
+          .where('status', isEqualTo: OrderStatus.cancelled.name)
+          .get();
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<List<OrderModel>> getAllCompleteData() async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection(orderCollection)
+          .where('status', isEqualTo: OrderStatus.delivered.name)
+          .get();
+      return querySnapshot.docs
+          .map(
+            (doc) =>
+                OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id),
+          )
+          .toList();
     } catch (e) {
       throw e.toString();
     }
