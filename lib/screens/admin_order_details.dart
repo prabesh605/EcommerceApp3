@@ -1,47 +1,72 @@
 import 'package:ecommerce_app3/constants/strings.dart';
 import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/order_model.dart';
+import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
-class UserOrderDetails extends StatefulWidget {
-  const UserOrderDetails({super.key, required this.myOrder});
+class AdminOrderDetails extends StatefulWidget {
+  const AdminOrderDetails({super.key, required this.myOrder});
   final OrderModel myOrder;
   @override
-  State<UserOrderDetails> createState() => _UserOrderDetailsState();
+  State<AdminOrderDetails> createState() => _AdminOrderDetailsState();
 }
 
-class _UserOrderDetailsState extends State<UserOrderDetails> {
-  int orderPosition(OrderStatus status) {
+class _AdminOrderDetailsState extends State<AdminOrderDetails> {
+  FirebaseService service = FirebaseService();
+  OrderStatus changeOrderStatus(OrderStatus status) {
     switch (status) {
       case OrderStatus.orderPlaced:
-        return 0;
+        return OrderStatus.processing;
 
       case OrderStatus.processing:
-        return 1;
+        return OrderStatus.shipped;
 
       case OrderStatus.shipped:
-        return 2;
+        return OrderStatus.outForDelivery;
 
       case OrderStatus.outForDelivery:
-        return 3;
+        return OrderStatus.delivered;
 
       case OrderStatus.delivered:
         // Already completed
-        return 4;
+        return OrderStatus.delivered;
 
       case OrderStatus.cancelled:
         // Cannot move forward from cancelled
-        return 5;
+        return OrderStatus.cancelled;
+    }
+  }
+
+  String textName(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.orderPlaced:
+        return "Confirm Order";
+
+      case OrderStatus.processing:
+        return "Ship Order";
+
+      case OrderStatus.shipped:
+        return "Out for Delivery";
+
+      case OrderStatus.outForDelivery:
+        return "Mark as Delivered";
+
+      case OrderStatus.delivered:
+        return "Order Delivered";
+
+      case OrderStatus.cancelled:
+        return "Order Cancelled";
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("User Order Detail")),
+      appBar: AppBar(title: Text("Admin Order Detail")),
       body: Column(
         children: [
           Container(
+            width: double.infinity,
             margin: EdgeInsets.all(12),
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
@@ -50,7 +75,7 @@ class _UserOrderDetailsState extends State<UserOrderDetails> {
             ),
             child: Column(
               children: [
-                // Text(myOrder.user),
+                // Text(myOrder.Admin),
                 Text("Total Cost:${widget.myOrder.total}"),
                 Text("OrderAt: ${widget.myOrder.createdDate}"),
                 Text("PaymentDetails:${widget.myOrder.paymentDetail}"),
@@ -58,18 +83,29 @@ class _UserOrderDetailsState extends State<UserOrderDetails> {
             ),
           ),
           SizedBox(height: 20),
-          Stepper(
-            currentStep: orderPosition(widget.myOrder.status),
-
-            steps: OrderStatus.values
-                .map(
-                  (status) => Step(
-                    title: Text(status.name),
-                    content: Text(status.name),
-                  ),
-                )
-                .toList(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              OutlinedButton(
+                onPressed: () async {
+                  OrderStatus order = changeOrderStatus(
+                    OrderStatus.orderPlaced,
+                  );
+                  await service.updateStatusOfOrder(widget.myOrder.id, order);
+                },
+                child: Text(textName(OrderStatus.shipped)),
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () {},
+                child: Text(
+                  "Cancel Order",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
           ),
+          SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
               itemCount: widget.myOrder.products.length,

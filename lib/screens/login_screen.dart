@@ -1,3 +1,4 @@
+import 'package:ecommerce_app3/models/user_model.dart';
 import 'package:ecommerce_app3/screens/Navigation_screen.dart';
 import 'package:ecommerce_app3/screens/admin_dasboard.dart';
 import 'package:ecommerce_app3/screens/forgot_password.dart';
@@ -160,12 +161,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         passwordController.text,
                       );
                       if (user.user != null) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NavigationScreen(),
-                          ),
-                        );
+                        UserModel userData = await firebaseService
+                            .getCurrentUserData(user.user!.uid);
+                        if (userData.userGroup == 'admin') {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdminDasboard(),
+                            ),
+                          );
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NavigationScreen(),
+                            ),
+                          );
+                        }
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

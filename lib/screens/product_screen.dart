@@ -234,6 +234,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     child: GestureDetector(
                       onTap: () async {
                         User? user = await service.getLoginUserInfo();
+
                         if (user != null) {
                           List<CartModel> product = [];
                           CartModel pro = CartModel(
