@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^1.2.2
   firebase_storage: ^13.4.5
   easy_stepper: ^1.2.0
+  khalti_checkout_flutter: ^1.0.1
 
 dev_dependencies:
   flutter_test:

@@ -8,6 +8,7 @@ import 'package:ecommerce_app3/models/cart_model.dart';
 import 'package:ecommerce_app3/models/order_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
 import 'package:ecommerce_app3/models/wishlist_model.dart';
+import 'package:ecommerce_app3/screens/payment_section_page.dart';
 import 'package:ecommerce_app3/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -233,36 +234,42 @@ class _ProductScreenState extends State<ProductScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        User? user = await service.getLoginUserInfo();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentSectionPage(),
+                          ),
+                        );
+                        // User? user = await service.getLoginUserInfo();
 
-                        if (user != null) {
-                          List<CartModel> product = [];
-                          CartModel pro = CartModel(
-                            id: '',
-                            title: widget.product.title,
-                            subTitle: widget.product.subTitle,
-                            category: widget.product.category,
-                            categoryId: widget.product.categoryId,
-                            description: widget.product.description,
-                            rating: widget.product.rating,
-                            price: widget.product.price,
-                            imageUrl: widget.product.imageUrl,
-                            user: '',
-                            quantity: count,
-                          );
-                          product.add(pro);
-                          OrderModel order = OrderModel(
-                            id: "id",
-                            products: product,
-                            total: 1000.0,
-                            createdDate: DateTime.now(),
-                            user: user.uid,
-                            address: "Ktm",
-                            paymentDetail: "paymentDetail",
-                            status: OrderStatus.orderPlaced,
-                          );
-                          await service.addOrder(order);
-                        }
+                        // if (user != null) {
+                        //   List<CartModel> product = [];
+                        //   CartModel pro = CartModel(
+                        //     id: '',
+                        //     title: widget.product.title,
+                        //     subTitle: widget.product.subTitle,
+                        //     category: widget.product.category,
+                        //     categoryId: widget.product.categoryId,
+                        //     description: widget.product.description,
+                        //     rating: widget.product.rating,
+                        //     price: widget.product.price,
+                        //     imageUrl: widget.product.imageUrl,
+                        //     user: '',
+                        //     quantity: count,
+                        //   );
+                        //   product.add(pro);
+                        //   OrderModel order = OrderModel(
+                        //     id: "id",
+                        //     products: product,
+                        //     total: 1000.0,
+                        //     createdDate: DateTime.now(),
+                        //     user: user.uid,
+                        //     address: "Ktm",
+                        //     paymentDetail: "paymentDetail",
+                        //     status: OrderStatus.orderPlaced,
+                        //   );
+                        //   await service.addOrder(order);
+                        // }
                       },
                       child: Container(
                         padding: EdgeInsets.all(12),
