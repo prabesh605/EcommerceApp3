@@ -16,32 +16,52 @@ class _PaymentSectionPageState extends State<PaymentSectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("My Payment Section")),
-      body: Column(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              Map<String, dynamic> data = await khaltiService
-                  .getKhaltiPidxNumber();
-              final pidxNumber = data['pidx'];
-              final payment_url = data['payment_url'];
-              if (pidxNumber != null && payment_url != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => KhaltiScreen(
-                      pidxNumber: pidxNumber,
-                      paymentUrl: payment_url,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () async {
+                Map<String, dynamic> data = await khaltiService
+                    .getKhaltiPidxNumber();
+                final pidxNumber = data['pidx'];
+                final payment_url = data['payment_url'];
+                if (pidxNumber != null && payment_url != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KhaltiScreen(
+                        pidxNumber: pidxNumber,
+                        paymentUrl: payment_url,
+                      ),
                     ),
-                  ),
-                );
-              } else {
-                print(pidxNumber);
-              }
-            },
-            child: Image.asset('assets/khalti.png'),
-          ),
-          Text("Cash on Delivery"),
-        ],
+                  );
+                } else {
+                  print(pidxNumber);
+                }
+              },
+              child: Container(
+                height: 100,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(),
+                ),
+                child: Image.asset('assets/khalti.png'),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 100,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(),
+              ),
+              child: Center(child: Text("Cash on Delivery")),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,12 +22,16 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
       publicKey: 'ff1cc42944b84efaad77e573bbaf9378',
       pidx: widget.pidxNumber,
       paymentUrl: widget.paymentUrl,
+      environment: Environment.test,
     );
     khalti = Khalti.init(
       payConfig: payConfig,
       onPaymentResult: (paymentResult, khalti) {
         print(paymentResult.toString());
+      
+
       },
+    
       onMessage:
           (
             khalti, {
@@ -47,10 +51,29 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Khalti")),
-      body: Column(children: [
-          
-        ],
+      body: Center(
+        child: FutureBuilder(
+          future: khalti,
+          initialData: null,
+          builder: (context, snapshot) {
+            final khaltiSnapshot = snapshot.data;
+            if (khaltiSnapshot == null) {
+              return const CircularProgressIndicator.adaptive();
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Rs. 100', style: TextStyle(fontSize: 25)),
+                const Text('1 day fee'),
+                OutlinedButton(
+                  onPressed: () => khaltiSnapshot.open(context),
+                  child: const Text('Pay with Khalti'),
+                ),
+                const SizedBox(height: 120),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
