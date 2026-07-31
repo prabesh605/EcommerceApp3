@@ -234,42 +234,43 @@ class _ProductScreenState extends State<ProductScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PaymentSectionPage(),
-                          ),
-                        );
-                        // User? user = await service.getLoginUserInfo();
+                        User? user = await service.getLoginUserInfo();
 
-                        // if (user != null) {
-                        //   List<CartModel> product = [];
-                        //   CartModel pro = CartModel(
-                        //     id: '',
-                        //     title: widget.product.title,
-                        //     subTitle: widget.product.subTitle,
-                        //     category: widget.product.category,
-                        //     categoryId: widget.product.categoryId,
-                        //     description: widget.product.description,
-                        //     rating: widget.product.rating,
-                        //     price: widget.product.price,
-                        //     imageUrl: widget.product.imageUrl,
-                        //     user: '',
-                        //     quantity: count,
-                        //   );
-                        //   product.add(pro);
-                        //   OrderModel order = OrderModel(
-                        //     id: "id",
-                        //     products: product,
-                        //     total: 1000.0,
-                        //     createdDate: DateTime.now(),
-                        //     user: user.uid,
-                        //     address: "Ktm",
-                        //     paymentDetail: "paymentDetail",
-                        //     status: OrderStatus.orderPlaced,
-                        //   );
-                        //   await service.addOrder(order);
-                        // }
+                        if (user != null) {
+                          List<CartModel> product = [];
+                          CartModel pro = CartModel(
+                            id: '',
+                            title: widget.product.title,
+                            subTitle: widget.product.subTitle,
+                            category: widget.product.category,
+                            categoryId: widget.product.categoryId,
+                            description: widget.product.description,
+                            rating: widget.product.rating,
+                            price: widget.product.price,
+                            imageUrl: widget.product.imageUrl,
+                            user: '',
+                            quantity: count,
+                          );
+                          product.add(pro);
+                          OrderModel order = OrderModel(
+                            id: "id",
+                            products: product,
+                            total: 1000.0,
+                            createdDate: DateTime.now(),
+                            user: user.uid,
+                            address: "Ktm",
+                            paymentDetail: PaymentDetail('kk', '', '1000'),
+                            status: OrderStatus.orderPlaced,
+                          );
+                          // await service.addOrder(order);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PaymentSectionPage(order: order),
+                            ),
+                          );
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.all(12),

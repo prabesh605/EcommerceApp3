@@ -11,7 +11,7 @@ class OrderModel {
   final DateTime createdDate;
   final String user;
   final String address;
-  final String paymentDetail;
+  final PaymentDetail paymentDetail;
   final OrderStatus status;
   OrderModel({
     required this.id,
@@ -36,7 +36,7 @@ class OrderModel {
       createdDate: json['createdDate'].toDate(),
       user: json['user'],
       address: json['address'],
-      paymentDetail: json['paymentDetail'],
+      paymentDetail: PaymentDetail.fromJson(json['paymentDetail']),
       status: OrderStatus.values.byName(json['status']),
     );
   }
@@ -46,8 +46,32 @@ class OrderModel {
     'createdDate': createdDate,
     'user': user,
     'address': address,
-    'paymentDetail': paymentDetail,
+    'paymentDetail': paymentDetail.toJson(),
     'status': status.name,
   };
 }
+
 // products.map((pro) => pro.toJson()).toList(),
+class PaymentDetail {
+  final String paymentGateway;
+  final String transactionId;
+  final String amount;
+
+  PaymentDetail(this.paymentGateway, this.transactionId, this.amount);
+
+  factory PaymentDetail.fromJson(Map<String, dynamic> json) {
+    return PaymentDetail(
+      json['PaymentGateway']?.toString() ?? '',
+      json['transactionId']?.toString() ?? '',
+      json['amount']?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'PaymentGateway': paymentGateway,
+      'transactionId': transactionId,
+      'amount': amount,
+    };
+  }
+}

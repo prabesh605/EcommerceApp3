@@ -1,10 +1,12 @@
+import 'package:ecommerce_app3/models/order_model.dart';
 import 'package:ecommerce_app3/screens/khalti_screen.dart';
 import 'package:ecommerce_app3/screens/user_order_screen.dart';
 import 'package:ecommerce_app3/services/khalti_service.dart';
 import 'package:flutter/material.dart';
 
 class PaymentSectionPage extends StatefulWidget {
-  const PaymentSectionPage({super.key});
+  const PaymentSectionPage({super.key, required this.order});
+  final OrderModel order;
 
   @override
   State<PaymentSectionPage> createState() => _PaymentSectionPageState();
@@ -33,6 +35,7 @@ class _PaymentSectionPageState extends State<PaymentSectionPage> {
                       builder: (context) => KhaltiScreen(
                         pidxNumber: pidxNumber,
                         paymentUrl: payment_url,
+                        order: widget.order,
                       ),
                     ),
                   );
