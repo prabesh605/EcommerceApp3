@@ -1,0 +1,48 @@
+import 'package:ecommerce_app3/screens/khalti_screen.dart';
+import 'package:ecommerce_app3/screens/user_order_screen.dart';
+import 'package:ecommerce_app3/services/khalti_service.dart';
+import 'package:flutter/material.dart';
+
+class PaymentSectionPage extends StatefulWidget {
+  const PaymentSectionPage({super.key});
+
+  @override
+  State<PaymentSectionPage> createState() => _PaymentSectionPageState();
+}
+
+class _PaymentSectionPageState extends State<PaymentSectionPage> {
+  KhaltiService khaltiService = KhaltiService();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("My Payment Section")),
+      body: Column(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              Map<String, dynamic> data = await khaltiService
+                  .getKhaltiPidxNumber();
+              final pidxNumber = data['pidx'];
+              final payment_url = data['payment_url'];
+              if (pidxNumber != null && payment_url != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KhaltiScreen(
+                      pidxNumber: pidxNumber,
+                      paymentUrl: payment_url,
+                    ),
+                  ),
+                );
+              } else {
+                print(pidxNumber);
+              }
+            },
+            child: Image.asset('assets/khalti.png'),
+          ),
+          Text("Cash on Delivery"),
+        ],
+      ),
+    );
+  }
+}
