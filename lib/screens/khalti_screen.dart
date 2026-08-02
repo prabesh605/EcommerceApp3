@@ -27,6 +27,7 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
   FirebaseService service = FirebaseService();
   @override
   void initState() {
+    super.initState();
     final payConfig = KhaltiPayConfig(
       // publicKey: 'ff1cc42944b84efaad77e573bbaf9378',
       publicKey: '5c8cdd2f88be406d9f32fc7b51c7cb71',
@@ -36,17 +37,19 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
     );
     khalti = Khalti.init(
       payConfig: payConfig,
-      onPaymentResult: (paymentResult, khalti) {
+      enableDebugging: true,
+      onPaymentResult: (paymentResult, khalti) async {
         print(paymentResult.payload?.status);
         print(paymentResult.payload?.pidx);
         print(paymentResult.payload?.totalAmount);
         print(paymentResult.payload?.transactionId);
 
         onSuccess();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => NavigationScreen()),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => NavigationScreen()),
+        // );
+        khalti.close(context);
       },
       onReturn: () {
         print("abc");
@@ -63,9 +66,9 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
             print(
               'Description: $description, Status Code: $statusCode, Event: $event, NeedsPaymentConfirmation: $needsPaymentConfirmation',
             );
+            khalti.close(context);
           },
     );
-    super.initState();
   }
 
   Future<void> onSuccess() async {

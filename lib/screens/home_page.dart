@@ -1,5 +1,6 @@
 import 'package:ecommerce_app3/models/category_model.dart';
 import 'package:ecommerce_app3/models/product_model.dart';
+import 'package:ecommerce_app3/notification_service.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:ecommerce_app3/screens/product_screen.dart';
 import 'package:ecommerce_app3/screens/user_screen.dart';
@@ -87,6 +88,17 @@ class _HomePageState extends State<HomePage> {
                   hint: Text('Search any Product'),
                   border: OutlineInputBorder(),
                 ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  NotificationService.instance.scheduleNotification(
+                    id: 1,
+                    title: "Schedule Notifcation",
+                    body: "this is Test Notication",
+                    scheduleTime: DateTime.now().add(Duration(seconds: 30)),
+                  );
+                },
+                child: Text("Notification"),
               ),
               SizedBox(height: 20),
               //all feature sort/ filter

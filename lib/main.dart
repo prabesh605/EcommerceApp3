@@ -4,6 +4,7 @@ import 'package:ecommerce_app3/bloc/imageUpload/imageUpload_bloc.dart';
 import 'package:ecommerce_app3/bloc/myOrder/my_order_bloc.dart';
 import 'package:ecommerce_app3/bloc/product/product_bloc.dart';
 import 'package:ecommerce_app3/bloc/wishlist/wishlist_bloc.dart';
+import 'package:ecommerce_app3/notification_service.dart';
 import 'package:ecommerce_app3/screens/home_page.dart';
 import 'package:ecommerce_app3/screens/login_screen.dart';
 import 'package:ecommerce_app3/screens/splash_screen.dart';
@@ -19,6 +20,7 @@ import 'package:ecommerce_app3/screens/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  NotificationService.instance.init();
 
   runApp(const MyApp());
 }
