@@ -5,13 +5,20 @@ import 'package:timezone/timezone.dart' as tz;
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
-  FlutterLocalNotificationsPlugin _local = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _local =
+      FlutterLocalNotificationsPlugin();
   Future<void> init() async {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Kathmandu'));
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const settings = InitializationSettings(android: android);
+    const ios = DarwinInitializationSettings();
+    const settings = InitializationSettings(android: android, iOS: ios);
     await _local.initialize(settings: settings);
+    await _local
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.requestNotificationsPermission();
   }
 
   // Future<void> showNotification() async {
@@ -40,12 +47,15 @@ class NotificationService {
     const androidDetails = AndroidNotificationDetails(
       'default_channel',
       'Default Notification',
+      channelDescription: 'General notifications',
       importance: Importance.high,
       priority: Priority.high,
     );
     const details = NotificationDetails(android: androidDetails);
     await _local.zonedSchedule(
       id: id,
+      title: title,
+      body: body,
       scheduledDate: tzScheduled,
       notificationDetails: details,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,

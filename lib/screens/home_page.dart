@@ -90,8 +90,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  NotificationService.instance.scheduleNotification(
+                onPressed: () async {
+                  await NotificationService.instance.scheduleNotification(
                     id: 1,
                     title: "Schedule Notifcation",
                     body: "this is Test Notication",
