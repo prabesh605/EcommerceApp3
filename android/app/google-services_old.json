@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "615901094789",
+    "firebase_url": "https://smartprepquizapp-default-rtdb.firebaseio.com",
+    "project_id": "smartprepquizapp",
+    "storage_bucket": "smartprepquizapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615901094789:android:c6213f401ad3d95da31aec",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce_app3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615901094789-h6h91viul18gq0u0ns9kjns6evt1bu7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC10FxeuNVR-pGGJQlKoZxT24phxlRy0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "615901094789-h6h91viul18gq0u0ns9kjns6evt1bu7n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
